@@ -52,7 +52,7 @@ public class BurstlyPluginUI : AssetPostprocessor {
 		System.Diagnostics.Process p = new System.Diagnostics.Process();
 		p.StartInfo.UseShellExecute = false;
 		p.StartInfo.RedirectStandardOutput = true;
-		p.StartInfo.FileName = Application.dataPath + "/Editor/PostProcessBuildPlayer-Burstly";
+		p.StartInfo.FileName = Application.dataPath + "/Editor/PostProcessBuildPlayer_Burstly";
 		//p.StartInfo.Arguments = "'" + pathToBuiltProject + "' '" + deploymentPlatform + "' '" + EditorPrefs.GetString("AndroidSdkRoot") + "' '" + PlayerSettings.Android.keystoreName + "' '" + PlayerSettings.Android.keystorePassword + "' '" + PlayerSettings.Android.keyaliasName + "' '" + PlayerSettings.Android.keyaliasPassword + "'";
 		p.StartInfo.Arguments = "'" + pathToBuiltProject + "' '" + deploymentPlatform + "' '" + EditorPrefs.GetString("AndroidSdkRoot") + "'";
 		p.Start();
