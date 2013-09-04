@@ -182,30 +182,30 @@ def executeCommand(cmd):
 
 def postProcessAndroid():
     
-	androidSdkPath = sys.argv[3];
+	androidSdkPath = '\"'+sys.argv[3]+'\"';
 
-	apkFileName = sys.argv[1];
-	publishedFilePath = sys.argv[1].rpartition("/")[0];
-	publishedFileName = sys.argv[1].rpartition("/")[2];
-	pluginsDirPath = sys.argv[0].rpartition("PostProcessBuildPlayer-Burstly")[0] + "/Plugins/Android";
-	tempDirPath = publishedFilePath + "/TEMP-" + publishedFileName;
+	apkFileName = '\"'+sys.argv[1]+'\"';
+	publishedFilePath = '\"'+sys.argv[1].rpartition("/")[0]+'\"';
+	publishedFileName = '\"'+sys.argv[1].rpartition("/")[2]+'\"';
+	pluginsDirPath = '\"'+sys.argv[0].rpartition("PostProcessBuildPlayer-Burstly")[0] + "/Plugins/Android"+'\"';
+	tempDirPath = '\"'+publishedFilePath + '/TEMP-' + publishedFileName+'\"';
 
-	executeCommand("rm -rf " + tempDirPath);
+	executeCommand('rm -rf ' + tempDirPath);
 	print("Unzipping " + apkFileName + " to " + tempDirPath);
-	executeCommand("unzip " + apkFileName + " -d " + tempDirPath);
+	executeCommand('unzip ' + apkFileName + ' -d ' + tempDirPath);
 	# META-INF holds the past code sign metadata. If it is not deleted the install will fail.
 	print("Deleting " + tempDirPath + "/META-INF");
-	executeCommand("rm -rf " + tempDirPath + "/META-INF");
+	executeCommand('rm -rf ' + tempDirPath + '/META-INF');
 	print("Copying Burstly SDK assets/ to " + tempDirPath + "/assets");
-	executeCommand("cp " + pluginsDirPath + "/assets/* " + tempDirPath + "/assets");
-	executeCommand("rm " + tempDirPath + "/assets/*.meta");
+	executeCommand('cp ' + pluginsDirPath + '/assets/* ' + tempDirPath + '/assets');
+	executeCommand('rm ' + tempDirPath + '/assets/*.meta');
 	print("Re-zipping APK");
-	executeCommand("rm " + apkFileName);
+	executeCommand('rm ' + apkFileName);
 	os.chdir(tempDirPath);
-	executeCommand("zip -r " + apkFileName + " `ls " + tempDirPath + "`");
+	executeCommand('zip -r ' + apkFileName + ' `ls ' + tempDirPath + '`');
 	os.chdir(publishedFilePath);
 	print("Removing temporary work folder");
-	executeCommand("rm -rf " + tempDirPath);
+	executeCommand('rm -rf ' + tempDirPath);
 	print("Signing APK");
 	# We only want to use a custom keystore/keyalias if they're passed in by the script
 	if (len(sys.argv) == 8 and sys.argv[4] != ""):
@@ -213,14 +213,14 @@ def postProcessAndroid():
 		keystorePassword = sys.argv[5];
 		keyaliasName = sys.argv[6];
 		keyaliasPassword = sys.argv[7];
-		executeCommand("jarsigner -verbose -keystore " + keystoreName + " -storepass " + keystorePassword + " -keypass " + keyaliasPassword + " " + apkFileName + " " + keyaliasName);	
+		executeCommand('jarsigner -verbose -keystore ' + keystoreName + ' -storepass ' + keystorePassword + ' -keypass ' + keyaliasPassword + ' ' + apkFileName + ' ' + keyaliasName);	
 	else:
 		# Use the Android debug key if there is not one passed
-		executeCommand("jarsigner -verbose -keystore ~/.android/debug.keystore -storepass android -keypass android " + apkFileName + " androiddebugkey");
+		executeCommand('jarsigner -verbose -keystore ~/.android/debug.keystore -storepass android -keypass android ' + apkFileName + ' androiddebugkey');
 	print("Aligning APK");
-	executeCommand("mv " + apkFileName + " " + apkFileName + ".apk");
-	executeCommand(androidSdkPath + "/tools/zipalign -v 4 " + apkFileName + ".apk " + apkFileName);
-	executeCommand("rm " + apkFileName + ".apk");
+	executeCommand('mv ' + apkFileName + ' '  + apkFileName + '.apk');
+	executeCommand('\"'+androidSdkPath + '/tools/zipalign\" -v 4 ' + apkFileName + '.apk ' + apkFileName);
+	executeCommand('rm ' + apkFileName + '.apk');
 	
 	
 	
